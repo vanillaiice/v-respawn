@@ -1,5 +1,5 @@
 all: linux win
 linux:
-	v . -o bin/infini
+	v . -o bin/respawn
 win:
-	v . -os windows -o bin/infini.exe
+	v . -os windows -o bin/respawn.exe

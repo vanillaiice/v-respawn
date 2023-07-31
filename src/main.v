@@ -1,19 +1,23 @@
 import os
 import flag
+import time
 
 const (
-	dash      = u8(45)
+	dash_byte = u8(45)
 	space_str = ' '
 	empty_str = ''
 )
 
 fn parse_args(args string) []string {
+	if args == empty_str {
+		return [empty_str]
+	}
+	
 	mut args_split := args.split(space_str)
-	mut args_temp := []string{}
-	mut args_parsed := []string{}
+	mut args_temp, mut args_parsed := []string{}, []string{}
 
 	for i := 0; i < args_split.len; i++ {
-		if args_split[i][0] == dash {
+		if args_split[i][0] == dash_byte {
 			if args_temp.len != 0 {
 				args_parsed << args_temp.join(space_str)
 				args_temp.clear()
@@ -35,36 +39,50 @@ fn main() {
 	mut kill_count := 0
 	mut fp := flag.new_flag_parser(os.args)
 	fp.version('v0.1.0')
-	fp.description('Run a program forever')
-	fp.usage_example('infini --program foo --args "--bar baz -z fizz"')
+	fp.description('Respawn a program after it gets killed')
+	fp.usage_example('respawn --program foo --args "--bar baz -z fizz" --work-folder ../buzz --max-retry 5 --retry-time 60')
 	program := fp.string('program', `p`, '', '--program <PATH> or -p <PATH>')
 	args := fp.string('args', `a`, empty_str, '--args "<ARGS>" or -a "<ARGS>"')
-	work_folder := fp.string('workfolder', `f`, empty_str, '--workfolder <FOLDER PATH> or -f <FOLDER PATH>')
-	max_retry := fp.int('maxretry', `r`, 5, '--maxretry <MAX RETRY INT> or -r <MAX RETRY INT>')
-	fp.finalize()!
+	work_folder := fp.string('work-folder', `f`, empty_str, '--work-folder <FOLDER PATH> or -f <FOLDER PATH>')
+	max_retry := fp.int('max-retry', `r`, 3, '--max-retry <MAX RETRY> or -r <MAX RETRY>')
+	retry_time := fp.int('retry-time', `t`, 0, '--retry-time <RETRY TIME SECONDS> or -t <RETRY TIME SECONDS>')
+	fp.finalize() or {
+		eprintln(err)
+		exit(1)
+	}
 
 	if program == empty_str {
-		eprintln("ERROR: parameter 'program' not provided")
+		eprintln("ERROR: parameter 'program' not provided, exiting")
 		exit(1)
 	}
 
 	args_arr := parse_args(args)
 
 	for {
-		mut p := os.new_process(program)
-		p.set_args(args_arr)
-		p.set_work_folder(work_folder)
-		p.run()
-		println('PID: ${p.pid}\n')
-		p.wait()
+		mut process := os.new_process(program)
+		
+		process.set_args(args_arr)
+		process.set_work_folder(work_folder)
+		
+		process.run()
+		println('PID: ${process.pid}')
+		process.wait()
+		
 		println('\nGot killed, respawning')
-		if p.err != empty_str {
-			eprintln("REASON: ${p.err}")
+		
+		if process.err != empty_str {
+			eprintln("REASON: ${process.err}")
 		}
+		
 		kill_count++
-		println('KILL COUNT: ${kill_count}\n')
+		
+		println('KILL COUNT: ${kill_count}')
 		if kill_count == max_retry {
 			break
+		}
+		
+		if retry_time != 0 {
+			time.sleep(time.second * retry_time)
 		}
 	}
 }

@@ -1,6 +1,6 @@
 # Binaries for programs and plugins
 main
-v_infini
+respawn
 *.exe
 *.exe~
 *.so
@@ -22,3 +22,9 @@ bin/
 # vweb and database
 *.db
 *.js
+
+# Ignore binary output of example program
+example/hi
+
+# Ignore output of example program
+example/hi*
