@@ -22,11 +22,11 @@ Arguments to be passed to the program. The arguments must be enclosed in single 
 
 Path to the work folder for the program. If omitted, the value will be the current directory.
 
-### ``--max-retry``` or ```-r``` (optional)
+### ```--max-retry``` or ```-r``` (optional)
 
 Number of times to respawn the program. If omitted, the value will be 3.
 
-### ``--retry-time``` or ```-t``` (optional)
+### ```--retry-time``` or ```-t``` (optional)
 
 Time in seconds between each respawn. If omitted, the value will be 0.
 
