@@ -12,7 +12,7 @@ fn parse_args(args string) []string {
 	if args == empty_str {
 		return [empty_str]
 	}
-	
+
 	mut args_split := args.split(space_str)
 	mut args_temp, mut args_parsed := []string{}, []string{}
 
@@ -60,27 +60,27 @@ fn main() {
 
 	for {
 		mut process := os.new_process(program)
-		
+
 		process.set_args(args_arr)
 		process.set_work_folder(work_folder)
-		
+
 		process.run()
 		println('PID: ${process.pid}')
 		process.wait()
-		
+
 		println('\nGot killed, respawning')
-		
+
 		if process.err != empty_str {
-			eprintln("REASON: ${process.err}")
+			eprintln('REASON: ${process.err}')
 		}
-		
+
 		kill_count++
-		
+
 		println('KILL COUNT: ${kill_count}')
 		if kill_count == max_retry {
 			break
 		}
-		
+
 		if retry_time != 0 {
 			time.sleep(time.second * retry_time)
 		}
