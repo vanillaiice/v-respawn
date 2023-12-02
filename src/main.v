@@ -3,7 +3,6 @@ import flag
 import time
 
 const (
-	dash_byte = u8(45)
 	space_str = ' '
 	empty_str = ''
 )
@@ -17,7 +16,7 @@ fn parse_args(args string) []string {
 	mut args_temp, mut args_parsed := []string{}, []string{}
 
 	for i := 0; i < args_split.len; i++ {
-		if args_split[i][0] == dash_byte {
+		if args_split[i][0] == u8(45) {
 			if args_temp.len != 0 {
 				args_parsed << args_temp.join(space_str)
 				args_temp.clear()
@@ -41,7 +40,7 @@ fn main() {
 	fp.version('v0.1.0')
 	fp.description('Respawn a program after it gets killed')
 	fp.usage_example('respawn --program foo --args "--bar baz -z fizz" --work-folder ../buzz --max-retry 5 --retry-time 60')
-	program := fp.string('program', `p`, '', '--program <PATH> or -p <PATH>')
+	program := fp.string('program', `p`, empty_str, '--program <PATH> or -p <PATH>')
 	args := fp.string('args', `a`, empty_str, '--args "<ARGS>" or -a "<ARGS>"')
 	work_folder := fp.string('work-folder', `f`, empty_str, '--work-folder <FOLDER PATH> or -f <FOLDER PATH>')
 	max_retry := fp.int('max-retry', `r`, 3, '--max-retry <MAX RETRY> or -r <MAX RETRY>')
