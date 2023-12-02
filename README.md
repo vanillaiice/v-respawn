@@ -1,6 +1,6 @@
 # V Respawn
 
-Respawn a program after it gets killed
+Respawn a program after it gets killed.
 
 ## Usage
 
@@ -29,6 +29,16 @@ Number of times to respawn the program. If omitted, the value will be 3.
 ### ```--retry-time``` or ```-t``` (optional)
 
 Time in seconds between each respawn. If omitted, the value will be 0.
+
+# Installation
+
+```
+> git clone https://github.com/vanillaiice/vrespawn
+> cd vrespawn
+> v .
+// or
+> make
+```
 
 ## Development dependencies
 
