@@ -1,7 +1,7 @@
 Module {
-	name: 'v_respawn'
+	name: 'vrespawn'
 	description: 'Respawn a program after it gets killed'
-	version: '0.1.0'
+	version: '0.1.1'
 	license: 'BSD-3-Clause'
 	dependencies: []
 }
